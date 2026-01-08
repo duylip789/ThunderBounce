@@ -1,0 +1,21 @@
+name: Build-Thunder-Cua-Toi
+on: [workflow_dispatch, push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build
+        run: |
+          chmod +x gradlew
+          ./gradlew build --no-daemon
+      - name: Tải file về
+        uses: actions/upload-artifact@v4
+        with:
+          name: Thanh-Pham-Jar
+          path: build/libs/*.jar
