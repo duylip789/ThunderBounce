@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "id": "thunderhack",
+  "id": "ThunderBounce",
   "version": "1.7",
   "icon": "icon.png",
-  "name": "ThunderHack",
-  "description": "Player Assistance Mod",
+  "name": "ThunderHack-Bounce",
+  "description": "Ez",
   "authors": [
     {
-      "name": "pan4ur",
+      "name": "pan4ur,kenzy",
       "contact": {
         "discord": "pan4ur"
       }
