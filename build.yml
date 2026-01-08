@@ -1,4 +1,4 @@
-name: Build-Thunder-Clean
+name: Build-Bounce-1.21
 on: [workflow_dispatch, push]
 jobs:
   build:
@@ -6,20 +6,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Java 17
+      - name: Setup Java 21 # Minecraft 1.21 bat buoc dung Java 21
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Cap quyen va Build
-        run: |
-          chmod +x gradlew
-          ./gradlew build -x test --no-daemon
+      - name: Fix Permissions
+        run: chmod +x gradlew
 
-      - name: Tai file jar ve
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+
+      - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
-          name: Thunder-Cua-Ban
+          name: Bounce-1.21-Jar
           path: build/libs/*.jar
