@@ -253,7 +253,6 @@ public class ModuleManager implements IManager {
     public static Phase phase = new Phase();
     public static NoBob noBob = new NoBob();
     public static Jesus jesus = new Jesus();
-    public static XRay xray = new XRay();
     public static Step step = new Step();
     public static Aura aura = new Aura();
     public static FOV fov = new FOV();
