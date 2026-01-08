@@ -1,21 +1,25 @@
-name: Build-Thunder-Cua-Toi
+name: Build-Thunder-Clean
 on: [workflow_dispatch, push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Java
+
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Build
+          cache: 'gradle'
+
+      - name: Cap quyen va Build
         run: |
           chmod +x gradlew
-          ./gradlew build --no-daemon
-      - name: Tải file về
+          ./gradlew build -x test --no-daemon
+
+      - name: Tai file jar ve
         uses: actions/upload-artifact@v4
         with:
-          name: Thanh-Pham-Jar
+          name: Thunder-Cua-Ban
           path: build/libs/*.jar
