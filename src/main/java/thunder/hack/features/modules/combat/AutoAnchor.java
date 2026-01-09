@@ -413,7 +413,8 @@ public final class AutoAnchor extends Module {
         if (ModuleManager.autoTrap.isEnabled() && !ModuleManager.surround.inactivityTimer.passedMs(500))
             return true;
 
-        if (ModuleManager.blocker.isEnabled() && !ModuleManager.surround.inactivityTimer.passedMs(500))
+    // Blocker module removed
+
             return true;
 
         if (ModuleManager.holeFill.isEnabled() && !HoleFill.inactivityTimer.passedMs(500))
@@ -422,7 +423,8 @@ public final class AutoAnchor extends Module {
         if (ModuleManager.aura.isEnabled() && aura.getValue())
             return true;
 
-        return ModuleManager.pistonAura.isEnabled() && pistonAura.getValue();
+        return false;
+
     }
 
     public void explodeAnchor(BlockHitResult bhr) {
