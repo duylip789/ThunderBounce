@@ -403,29 +403,34 @@ public final class AutoAnchor extends Module {
         return switchPause.getValue().isEnabled() && !Managers.PLAYER.switchTimer.passedMs(switchDelay.getValue()) && !silent && !silentWeakness;
     }
 
-    public boolean rotationMarkedDirty() {
-        if (ModuleManager.surround.isEnabled() && !ModuleManager.surround.inactivityTimer.passedMs(500) && surround.getValue())
-            return true;
-
-        if (ModuleManager.middleClick.isEnabled() && mc.options.pickItemKey.isPressed() && middleClick.getValue())
-            return true;
-
-        if (ModuleManager.autoTrap.isEnabled() && !ModuleManager.surround.inactivityTimer.passedMs(500))
-            return true;
-
-    // Blocker module removed
-
-            return true;
-
-        if (ModuleManager.holeFill.isEnabled() && !HoleFill.inactivityTimer.passedMs(500))
-            return true;
-
-        if (ModuleManager.aura.isEnabled() && aura.getValue())
-            return true;
-
-        return false;
-
+public boolean rotationMarkedDirty() {
+    if (ModuleManager.surround.isEnabled()
+            && !ModuleManager.surround.inactivityTimer.passedMs(500)
+            && surround.getValue()) {
+        return true;
     }
+
+    if (ModuleManager.middleClick.isEnabled()
+            && mc.options.pickItemKey.isPressed()
+            && middleClick.getValue()) {
+        return true;
+    }
+
+    if (ModuleManager.autoTrap.isEnabled()
+            && !ModuleManager.surround.inactivityTimer.passedMs(500)) {
+        return true;
+    }
+
+    // Blocker / HoleFill ĐÃ XOÁ HOÀN TOÀN → KHÔNG ĐỂ GÌ Ở ĐÂY
+
+    if (ModuleManager.aura.isEnabled() && aura.getValue()) {
+        return true;
+    }
+
+    return false;
+}
+
+
 
     public void explodeAnchor(BlockHitResult bhr) {
         if (shouldPause() || mc.player == null) return;
