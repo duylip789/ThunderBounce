@@ -565,13 +565,14 @@ public class AutoCrystal extends Module {
 
         if (ModuleManager.autoTrap.isEnabled() && !ModuleManager.surround.inactivityTimer.passedMs(500)) return true;
 
-        if (ModuleManager.blocker.isEnabled() && !ModuleManager.surround.inactivityTimer.passedMs(500)) return true;
+      // Blocker module was removed
 
         if (ModuleManager.holeFill.isEnabled() && !HoleFill.inactivityTimer.passedMs(500)) return true;
 
         if (ModuleManager.aura.isEnabled() && Aura.target != null && aura.getValue()) return true;
 
-        return ModuleManager.pistonAura.isEnabled() && pistonAura.getValue();
+       return false;
+
     }
 
     public void attackCrystal(EndCrystalEntity crystal) {
