@@ -1,5 +1,4 @@
 package thunder.hack.core.manager.client;
-
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
@@ -65,7 +64,6 @@ public class ModuleManager implements IManager {
     public static ChorusExploit chorusExploit = new ChorusExploit();
     public static MoreKnockback moreKnockback = new MoreKnockback();
     public static AntiServerAdd antiServerAdd = new AntiServerAdd();
-    public static AntiLegitMiss antiLegitMiss = new AntiLegitMiss();
     public static AntiBallPlace antiBallPlace = new AntiBallPlace();
     public static TridentBoost tridentBoost = new TridentBoost();
     public static Trajectories trajectories = new Trajectories();
@@ -111,7 +109,6 @@ public class ModuleManager implements IManager {
     public static StorageEsp storageEsp = new StorageEsp();
     public static StaffBoard staffBoard = new StaffBoard();
     public static PistonPush pistonPush = new PistonPush();
-    public static PistonAura pistonAura = new PistonAura();
     public static NoInteract noInteract = new NoInteract();
     public static ModuleList moduleList = new ModuleList();
     public static KillEffect killEffect = new KillEffect();
@@ -199,7 +196,6 @@ public class ModuleManager implements IManager {
     public static AntiAFK antiAFK = new AntiAFK();
     public static SoundFX soundFX = new SoundFX();
     public static AutoBed autoBed = new AutoBed();
-    public static TNTAura tntAura = new TNTAura();
     public static VoidESP voidESP = new VoidESP();
     public static Tracker tracker = new Tracker();
     public static TpsSync tpsSync = new TpsSync();
@@ -213,7 +209,6 @@ public class ModuleManager implements IManager {
     public static FastUse fastUse = new FastUse();
     public static BowSpam bowSpam = new BowSpam();
     public static BoatFly boatFly = new BoatFly();
-    public static Blocker blocker = new Blocker();
     public static AutoWeb autoWeb = new AutoWeb();
     public static AntiWeb antiWeb = new AntiWeb();
     public static AntiBot antiBot = new AntiBot();
@@ -235,7 +230,6 @@ public class ModuleManager implements IManager {
     public static Coords coords = new Coords();
     public static Burrow burrow = new Burrow();
     public static AutoEZ autoEZ = new AutoEZ();
-    public static AimBot aimBot = new AimBot();
     public static Quiver quiver = new Quiver();
     public static NoPush noPush = new NoPush();
     public static UnHook unHook = new UnHook();
