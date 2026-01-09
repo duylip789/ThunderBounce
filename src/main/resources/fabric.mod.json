@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "ThunderBounce",
+  "id": "thunderbounce",
   "version": "1.7",
   "icon": "icon.png",
-  "name": "ThunderHack-Bounce",
+  "name": "ThunderBounce",
   "description": "Ez",
   "authors": [
     {
