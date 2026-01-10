@@ -16,19 +16,16 @@ import java.awt.*;
 
 public class ThunderHack implements ModInitializer {
 
-    /* ================= CONST ================= */
+    /* ================= BASIC ================= */
 
     public static final String MOD_ID = "thunderbounce";
     public static final String VERSION = "0.1";
 
-    /* ================= META ================= */
-
     public static ModMetadata MOD_META;
-
-    /* ================= GLOBAL ================= */
-
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final Runtime RUNTIME = Runtime.getRuntime();
+
+    /* ================= MINECRAFT ================= */
 
     public static MinecraftClient mc;
     public static long initTime;
@@ -41,7 +38,13 @@ public class ThunderHack implements ModInitializer {
 
     public static Core core = new Core();
 
-    /* ================= STATE ================= */
+    /* ================= STATES (GUI / MIXIN NEED) ================= */
+
+    public static boolean isOutdated = false;
+    public static String[] contributors = new String[32];
+
+    public static Color copy_color = new Color(-1);
+    public static KeyListening currentKeyListener = null;
 
     public static float TICK_TIMER = 1f;
     public static BlockPos gps_position;
@@ -72,7 +75,7 @@ public class ThunderHack implements ModInitializer {
             LOGGER.error("[ThunderBounce] Manager init failed", t);
         }
 
-        LOGGER.info("[ThunderBounce] Loaded ({} ms)",
+        LOGGER.info("[ThunderBounce] Loaded successfully ({} ms)",
                 System.currentTimeMillis() - initTime);
     }
 
@@ -80,5 +83,15 @@ public class ThunderHack implements ModInitializer {
 
     public static boolean isFuturePresent() {
         return FabricLoader.getInstance().isModLoaded("future");
+    }
+
+    /* ================= ENUM ================= */
+
+    public enum KeyListening {
+        ThunderGui,
+        ClickGui,
+        Search,
+        Sliders,
+        Strings
     }
 }
