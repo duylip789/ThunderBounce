@@ -3,7 +3,7 @@ package thunder.hack;
 import com.mojang.logging.LogUtils;
 import meteordevelopment.orbit.EventBus;
 import meteordevelopment.orbit.IEventBus;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.MinecraftClient;
@@ -18,23 +18,29 @@ import thunder.hack.utility.render.Render2DEngine;
 
 import java.awt.*;
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
-public class ThunderHack implements ModInitializer {
+public final class ThunderHack implements ClientModInitializer {
 
-    /* ===== MOD INFO ===== */
+    /* ================= MOD INFO ================= */
 
     public static final String MOD_ID = "thunderhack";
     public static final String VERSION = "1.0";
+
     public static String GITHUB_HASH = "dev";
     public static String BUILD_DATE = "unknown";
 
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final Runtime RUNTIME = Runtime.getRuntime();
 
+    /** ⚠️ FIX CRASH: KHÔNG orElseThrow */
     public static final ModMetadata MOD_META =
-            FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow().getMetadata();
+            FabricLoader.getInstance()
+                    .getModContainer(MOD_ID)
+                    .map(ModMetadata::getMetadata)
+                    .orElse(null);
 
-    /* ===== GLOBAL ===== */
+    /* ================= GLOBAL ================= */
 
     public static MinecraftClient mc;
     public static long initTime;
@@ -45,12 +51,12 @@ public class ThunderHack implements ModInitializer {
     public static BlockPos gps_position;
     public static float TICK_TIMER = 1f;
 
-    /* ===== EVENT BUS ===== */
+    /* ================= EVENT BUS ================= */
 
     public static final IEventBus EVENT_BUS = new EventBus();
     public static final Core core = new Core();
 
-    /* ===== GUI ===== */
+    /* ================= GUI ================= */
 
     public static KeyListening currentKeyListener = null;
 
@@ -62,20 +68,22 @@ public class ThunderHack implements ModInitializer {
         Strings
     }
 
-    /* ===== MOD CHECK ===== */
+    /* ================= MOD CHECK ================= */
 
     public static final boolean baritone =
             FabricLoader.getInstance().isModLoaded("baritone")
                     || FabricLoader.getInstance().isModLoaded("baritone-meteor");
 
-    /* ===== INIT ===== */
+    /* ================= INIT ================= */
 
     @Override
-    public void onInitialize() {
+    public void onInitializeClient() {
         initTime = System.currentTimeMillis();
+
+        /* ⚠️ CLIENT ONLY – SAFE */
         mc = MinecraftClient.getInstance();
 
-        /* ===== ORBIT FIX (QUAN TRỌNG) ===== */
+        /* ===== ORBIT FIX – KHÔNG CRASH ===== */
         EVENT_BUS.registerLambdaFactory(
                 "thunder.hack",
                 (lookupInMethod, klass) -> {
@@ -86,39 +94,49 @@ public class ThunderHack implements ModInitializer {
                                 MethodHandles.lookup()
                         );
                     } catch (Throwable t) {
-                        throw new RuntimeException(t);
+                        throw new RuntimeException("Orbit lambda factory failed", t);
                     }
                 }
         );
 
+        /* ===== MANIFEST SAFE READ ===== */
         try {
-            BUILD_DATE = ThunderUtility.readManifestField("Build-Timestamp");
-            GITHUB_HASH = ThunderUtility.readManifestField("Git-Commit");
-        } catch (Exception ignored) {}
+            BUILD_DATE = Optional
+                    .ofNullable(ThunderUtility.readManifestField("Build-Timestamp"))
+                    .orElse("dev");
 
+            GITHUB_HASH = Optional
+                    .ofNullable(ThunderUtility.readManifestField("Git-Commit"))
+                    .orElse("dev");
+        } catch (Throwable ignored) {}
+
+        /* ===== CORE ===== */
         EVENT_BUS.subscribe(core);
 
+        /* ===== MANAGERS ===== */
         try {
             Managers.init();
             Managers.subscribe();
         } catch (Throwable t) {
-            LOGGER.error("[ThunderHack] Manager init failed", t);
+            LOGGER.error("[ThunderHack] Managers init failed", t);
         }
 
+        /* ===== RENDER ===== */
         try {
             Render2DEngine.initShaders();
         } catch (Throwable t) {
-            LOGGER.error("[ThunderHack] Shader init failed", t);
+            LOGGER.warn("[ThunderHack] Shader init skipped");
         }
 
+        /* ===== SHUTDOWN ===== */
         RUNTIME.addShutdownHook(new ManagerShutdownHook());
         RUNTIME.addShutdownHook(new ModuleShutdownHook());
 
-        LOGGER.info("[ThunderHack] Loaded in {} ms",
+        LOGGER.info("[ThunderHack] Loaded successfully in {} ms",
                 System.currentTimeMillis() - initTime);
     }
 
-    /* ===== UTILS ===== */
+    /* ================= UTILS ================= */
 
     public static boolean isFuturePresent() {
         return FabricLoader.getInstance().getModContainer("future").isPresent();
