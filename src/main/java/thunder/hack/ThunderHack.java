@@ -5,6 +5,7 @@ import meteordevelopment.orbit.EventBus;
 import meteordevelopment.orbit.IEventBus;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import org.slf4j.Logger;
@@ -21,9 +22,9 @@ import java.lang.invoke.MethodHandles;
 public class ThunderHack implements ModInitializer {
 
     /* ===== MOD INFO ===== */
-    public static final String MOD_ID = "thunderbounce"; // PHẢI GIỐNG fabric.mod.json
-    public static final String VERSION = "1.0";
 
+    public static final String MOD_ID = "thunderhack";
+    public static final String VERSION = "1.0";
     public static String GITHUB_HASH = "dev";
     public static String BUILD_DATE = "unknown";
 
@@ -31,20 +32,23 @@ public class ThunderHack implements ModInitializer {
     public static final Runtime RUNTIME = Runtime.getRuntime();
 
     /* ===== GLOBAL ===== */
+
     public static MinecraftClient mc;
     public static long initTime;
 
     public static boolean isOutdated = false;
     public static String[] contributors = new String[32];
-    public static Color copy_color = Color.WHITE;
+    public static Color copy_color = new Color(255, 255, 255);
     public static BlockPos gps_position;
     public static float TICK_TIMER = 1f;
 
     /* ===== EVENT BUS ===== */
+
     public static final IEventBus EVENT_BUS = new EventBus();
     public static final Core core = new Core();
 
     /* ===== GUI ===== */
+
     public static KeyListening currentKeyListener = null;
 
     public enum KeyListening {
@@ -56,17 +60,19 @@ public class ThunderHack implements ModInitializer {
     }
 
     /* ===== MOD CHECK ===== */
+
     public static final boolean baritone =
             FabricLoader.getInstance().isModLoaded("baritone")
                     || FabricLoader.getInstance().isModLoaded("baritone-meteor");
 
     /* ===== INIT ===== */
+
     @Override
     public void onInitialize() {
         initTime = System.currentTimeMillis();
         mc = MinecraftClient.getInstance();
 
-        /* ===== ORBIT FIX (BẮT BUỘC) ===== */
+        // ORBIT FIX
         EVENT_BUS.registerLambdaFactory(
                 "thunder.hack",
                 (lookupInMethod, klass) -> {
@@ -93,24 +99,32 @@ public class ThunderHack implements ModInitializer {
             Managers.init();
             Managers.subscribe();
         } catch (Throwable t) {
-            LOGGER.error("[ThunderBounce] Manager init failed", t);
+            LOGGER.error("[ThunderHack] Manager init failed", t);
         }
 
         try {
             Render2DEngine.initShaders();
         } catch (Throwable t) {
-            LOGGER.error("[ThunderBounce] Shader init failed", t);
+            LOGGER.error("[ThunderHack] Shader init failed", t);
         }
 
         RUNTIME.addShutdownHook(new ManagerShutdownHook());
         RUNTIME.addShutdownHook(new ModuleShutdownHook());
 
-        LOGGER.info("[ThunderBounce] Loaded in {} ms",
+        LOGGER.info("[ThunderHack] Loaded in {} ms",
                 System.currentTimeMillis() - initTime);
     }
 
     /* ===== UTILS ===== */
+
     public static boolean isFuturePresent() {
         return FabricLoader.getInstance().getModContainer("future").isPresent();
+    }
+
+    public static ModMetadata getModMeta() {
+        return FabricLoader.getInstance()
+                .getModContainer(MOD_ID)
+                .orElseThrow()
+                .getMetadata();
     }
 }
