@@ -31,7 +31,7 @@ public final class ThunderUtility {
     public static List<String> starGazer = new ArrayList<>();
 
     public static @NotNull String getAuthors() {
-        List<String> names = ThunderHack.MOD_META.getAuthors()
+        List<String> names = ThunderHack.getModMeta().getAuthors()
                 .stream()
                 .map(Person::getName)
                 .toList();
