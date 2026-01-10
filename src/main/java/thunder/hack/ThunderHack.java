@@ -31,7 +31,6 @@ public class ThunderHack implements ModInitializer {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final Runtime RUNTIME = Runtime.getRuntime();
 
-    // ✅ FIX CHUẨN FABRIC
     public static final ModMetadata MOD_META =
             FabricLoader.getInstance()
                     .getModContainer(MOD_ID)
@@ -45,14 +44,32 @@ public class ThunderHack implements ModInitializer {
 
     public static boolean isOutdated = false;
     public static String[] contributors = new String[32];
-    public static Color copy_color = new Color(255, 255, 255);
+    public static Color copy_color = new Color(-1);
     public static BlockPos gps_position;
     public static float TICK_TIMER = 1f;
+
+    /* ===== BARITONE CHECK (CỰC QUAN TRỌNG) ===== */
+
+    public static final boolean baritone =
+            FabricLoader.getInstance().isModLoaded("baritone")
+                    || FabricLoader.getInstance().isModLoaded("baritone-meteor");
 
     /* ===== EVENT BUS ===== */
 
     public static final IEventBus EVENT_BUS = new EventBus();
     public static final Core core = new Core();
+
+    /* ===== GUI KEY LISTEN ===== */
+
+    public static KeyListening currentKeyListener = null;
+
+    public enum KeyListening {
+        ThunderGui,
+        ClickGui,
+        Search,
+        Sliders,
+        Strings
+    }
 
     /* ===== INIT ===== */
 
@@ -61,7 +78,7 @@ public class ThunderHack implements ModInitializer {
         initTime = System.currentTimeMillis();
         mc = MinecraftClient.getInstance();
 
-        // ✅ ORBIT FIX – KHÔNG ĐỤNG
+        // ORBIT LAMBDA FIX
         EVENT_BUS.registerLambdaFactory(
                 "thunder.hack",
                 (lookupInMethod, klass) -> {
@@ -94,5 +111,11 @@ public class ThunderHack implements ModInitializer {
 
         LOGGER.info("[ThunderHack] Loaded in {} ms",
                 System.currentTimeMillis() - initTime);
+    }
+
+    /* ===== UTILS ===== */
+
+    public static boolean isFuturePresent() {
+        return FabricLoader.getInstance().getModContainer("future").isPresent();
     }
 }
